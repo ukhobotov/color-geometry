@@ -3,6 +3,7 @@ const canvas = document.getElementById('space')
 const graphics = canvas.getContext('2d')
 var foreground = 'white'
 var background = 'black'
+var accent = 'yellow'
 
 const radius = 0.01
 const side = 2/Math.sqrt(3)
@@ -37,6 +38,7 @@ function draw() {
 	edges.sort((a, b) => a.center.z - b.center.z)
     graphics.fillStyle = background
 	graphics.fillRect(0, 0, canvas.width, canvas.height)
+	graphics.lineCap = 'round'
 	for (let i = 0; i < edges.length/2; i++) {
 		edges[i].draw()
 	}
