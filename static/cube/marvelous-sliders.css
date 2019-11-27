@@ -1,0 +1,37 @@
+input[type=range] {
+    -webkit-appearance: none;
+    height: 80px;
+    width: 400px;
+    margin-left: -140px;
+    margin-right: -140px;
+    margin-top: 200px;
+    margin-bottom: 200px;
+    transform: rotate(270deg);
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 2px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 76px;
+    width: 20;
+    cursor: pointer;
+    margin-left: 0px;
+}
+
+#redSlider::-webkit-slider-thumb {
+    background: tomato;
+}
+
+#greenSlider::-webkit-slider-thumb {
+    background: springgreen;
+}
+
+#blueSlider::-webkit-slider-thumb {
+    background: royalblue;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
