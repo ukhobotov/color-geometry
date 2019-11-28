@@ -132,6 +132,8 @@ class Edge {
 class Cursor extends Vector {
     constructor(r, g, b) {
         super(r, g, b)
+        this.normal = null
+        this.footing = null
     }
     get r() { return this.x }
     get g() { return this.y }
@@ -166,12 +168,7 @@ class Cursor extends Vector {
 
         graphics.setLineDash([])
     }
-    click(x, y) {
-        let axis = {
-            r: vertices.B.to(vertices.C),
-            g: vertices.B.to(vertices.B1),
-            b: vertices.B.to(vertices.A),
-        }
+    move(x, y) {
         let points = Object.values(vertices)
         points.sort((A, B) => B.z - A.z)
         let closest = points[0]
@@ -190,30 +187,36 @@ class Cursor extends Vector {
         }
         x -= closest.x
         y -= closest.y
-        let normal = null
         for (let i = 0; i < 3; i++) {
             let x1 = vectors[i].x
             let y1 = vectors[i].y
             let x2 = vectors[(i + 1) % 3].x
             let y2 = vectors[(i + 1) % 3].y
             if (Math.min((y - (y1/x1)*x)*(y2 - (y1/x1)*x2), (y - (y2/x2)*x)*(y1 - (y2/x2)*x1)) > 0) {
-                normal = vectors[(i + 2) % 3].times(-1)
+                this.normal = vectors[(i + 2) % 3].times(-1)
             }
         }
         for (let edge of edges) {
-            if (edge.A.by(normal) > 0 && edge.B.by(normal) > 0) {
+            if (edge.A.by(this.normal) > 0 && edge.B.by(this.normal) > 0) {
                 edge.color = '255,255,0'
             } else {
                 edge.color = '255,255,255'
             }
+            this.footing = edge.A // this is not principle
         }
+    }
+    click(x, y) {
+        let axis = {
+            r: vertices.B.to(vertices.C),
+            g: vertices.B.to(vertices.B1),
+            b: vertices.B.to(vertices.A),
+        }
+        let z = (this.normal.by(this.footing) - this.normal.x*x - this.normal.y*y) / this.normal.z
+        console.log(new Vector(x, y, z))
     }
     replace(r, g, b) {
         this.x = r
         this.y = g
         this.z = b
-    }
-    move(dr, dg, db) {
-        this.replace(this.r + dr, this.g + dg, this.b + db)
     }
 }

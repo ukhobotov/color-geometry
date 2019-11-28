@@ -7,5 +7,5 @@ import (
 
 func main() {
 	fmt.Println("starting server")
-	http.ListenAndServe(":8910", http.FileServer(http.Dir("static")))
+	http.ListenAndServe(":8910", http.FileServer(http.Dir("docs")))
 }

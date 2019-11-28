@@ -97,6 +97,11 @@ document.body.addEventListener('mousemove', (event) => {
 })
 
 canvas.addEventListener('mousemove', (event) => {
+	cursor.move(np(event.offsetX), np(event.offsetY))
+	draw()
+})
+
+canvas.addEventListener('mousedown', (event) => {
 	cursor.click(np(event.offsetX), np(event.offsetY))
 	draw()
 })
@@ -107,17 +112,17 @@ const sliders = {
 	blue: document.getElementById('blueSlider'),
 }
 
-sliders.red.addEventListener('mousemove', () => {
+sliders.red.addEventListener('input', () => {
 	cursor.x = sliders.red.value/255
 	draw()
 })
 
-sliders.green.addEventListener('mousemove', () => {
+sliders.green.addEventListener('input', () => {
 	cursor.y = sliders.green.value/255
 	draw()
 })
 
-sliders.blue.addEventListener('mousemove', () => {
+sliders.blue.addEventListener('input', () => {
 	cursor.z = sliders.blue.value/255
 	draw()
 })
