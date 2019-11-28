@@ -67,7 +67,7 @@ updateCanvasSize()
 
 window.addEventListener('resize', updateCanvasSize)
 
-const rp = (value) => value/canvas.height*2 - 1
+const np = (value) => value/canvas.height*2 - 1
 
 canvas.addEventListener('mouseleave', draw)
 
@@ -94,6 +94,11 @@ document.body.addEventListener('mousemove', (event) => {
 		rotateVertices(-event.movementY/500, -event.movementX/500, 0)
 		draw()
 	}
+})
+
+canvas.addEventListener('mousemove', (event) => {
+	cursor.click(np(event.offsetX), np(event.offsetY))
+	draw()
 })
 
 const sliders = {

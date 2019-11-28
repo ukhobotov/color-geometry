@@ -34,10 +34,12 @@ class Vector {
         return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z)
     }
     get xpx() {
-        return px((1 + 2*this.z)*this.x)
+        // return px((1 + 0.2*this.z)*this.x)
+        return px(this.x)
     }
     get ypx() {
-        return px((1 + 2*this.z)*this.y)
+        // return px((1 + 0.2*this.z)*this.y)
+        return px(this.y)
     }
     draw() {
         graphics.beginPath()
@@ -82,6 +84,9 @@ class Vector {
     to(vector) {
         return new Vector(vector.x - this.x, vector.y - this.y, vector.z - this.z)
     }
+    equals(vector) {
+        return this.x == vector.x && this.y == vector.y && this.z == vector.z
+    }
     axirize(axis) {
         return vertices.B.plus(axis.r.times(this.x)).plus(axis.g.times(this.y).plus(axis.b.times(this.z)))
     }
@@ -106,11 +111,12 @@ class Edge {
     constructor(A, B) {
         this.A = A
         this.B = B
+        this.color = '255,255,255'
     }
     draw() {
         const opacity = (this.center.z + 1)*0.1 + 0.5
         graphics.lineWidth = (this.center.z + 1) * 3 + 1
-        graphics.strokeStyle = `rgba(255,255,255,${opacity})`
+        graphics.strokeStyle = `rgba(${this.color},${opacity})`
         graphics.beginPath()
         graphics.moveTo(this.A.xpx, this.A.ypx)
         graphics.lineTo(this.B.xpx, this.B.ypx)
@@ -154,10 +160,6 @@ class Cursor extends Vector {
         for (let projection of projections) {
             let direction = point.to(projection)
             let offset = point.plus(direction.times(radius/direction.length == Infinity ? 0 : radius/direction.length))
-            // new Edge(
-            //     vertex(projection,  `${rgb(this.r)},${rgb(this.g)},${rgb(this.b)}`), 
-            //     vertex(offset,      `${rgb(this.r)},${rgb(this.g)},${rgb(this.b)}`),
-            // ).draw()
             graphics.lineWidth = (projection.z + 1) * 2 + 1
             projection.point(graphics.lineWidth, `rgb(${rgb(this.r)},${rgb(this.g)},${rgb(this.b)})`)
         }
@@ -170,7 +172,41 @@ class Cursor extends Vector {
             g: vertices.B.to(vertices.B1),
             b: vertices.B.to(vertices.A),
         }
-
+        let points = Object.values(vertices)
+        points.sort((A, B) => B.z - A.z)
+        let closest = points[0]
+        let vectors = []
+        for (let edge of edges) {
+            let point = null
+            if (edge.A == closest) {
+                point = edge.B
+            }
+            if (edge.B == closest) {
+                point = edge.A
+            }
+            if (point != null) {
+                vectors.push(closest.to(point))
+            }
+        }
+        x -= closest.x
+        y -= closest.y
+        let normal = null
+        for (let i = 0; i < 3; i++) {
+            let x1 = vectors[i].x
+            let y1 = vectors[i].y
+            let x2 = vectors[(i + 1) % 3].x
+            let y2 = vectors[(i + 1) % 3].y
+            if (Math.min((y - (y1/x1)*x)*(y2 - (y1/x1)*x2), (y - (y2/x2)*x)*(y1 - (y2/x2)*x1)) > 0) {
+                normal = vectors[(i + 2) % 3].times(-1)
+            }
+        }
+        for (let edge of edges) {
+            if (edge.A.by(normal) > 0 && edge.B.by(normal) > 0) {
+                edge.color = '255,255,0'
+            } else {
+                edge.color = '255,255,255'
+            }
+        }
     }
     replace(r, g, b) {
         this.x = r
