@@ -62,7 +62,7 @@ class Vector {
         graphics.fillStyle = color
         graphics.beginPath()
         graphics.moveTo(this.xpx, this.ypx)
-        graphics.arc(this.xpx, this.ypx, this.z + 4, 0, 2 * Math.PI, false)
+        graphics.arc(this.xpx, this.ypx, this.z * 2 + 4, 0, 2 * Math.PI, false)
         graphics.fill()
     }
     by(vector) {
@@ -244,13 +244,17 @@ class Cursor extends Vector {
                 }
             }
         }
-        this.projection = new Vector(projections[0], projections[1], projections[2])
-        console.log(this.projection.axirize())
-        this.projection.axirize().point(`rgb(${rgb(this.projection.r)},${rgb(this.projection.g)},${rgb(this.projection.b)})`)
+        let projection = new Cursor(projections[0], projections[1], projections[2])
+        this.next = new Cursor(
+            projections[0] != 0 && projections[0] != 1 ? projections[0] : this.r, 
+            projections[1] != 0 && projections[1] != 1 ? projections[1] : this.g, 
+            projections[2] != 0 && projections[2] != 1 ? projections[2] : this.b,
+        )
+        projection.axirize().point(`rgb(${rgb(this.next.r)},${rgb(this.next.g)},${rgb(this.next.b)})`)
     }
     click() {
-        this.r = this.projection.x
-        this.g = this.projection.y
-        this.b = this.projection.z
+        this.r = this.next.r
+        this.g = this.next.g
+        this.b = this.next.b
     }
 }

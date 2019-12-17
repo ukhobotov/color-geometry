@@ -54,7 +54,7 @@ function updateCanvasSize() {
     draw()
 }
 
-cursor = new Cursor(127/255, 127/255, 127/255)
+cursor = new Cursor(0.9, 0.2, 0.4)
 
 function rotateVertices(x, y, z) {
     for (let value of Object.values(vertices)) {
@@ -75,8 +75,8 @@ let xlast = 0
 let ylast = 0
 document.body.addEventListener('wheel', (event) => {
     rotateVertices(0, event.deltaX / 500, event.deltaY / 500)
-    cursor.move(xlast, ylast)
     draw()
+    cursor.move(xlast, ylast)
 })
 
 let wheelPressed = false
@@ -93,13 +93,13 @@ document.body.addEventListener('mouseup', (event) => {
 })
 
 document.body.addEventListener('mousemove', (event) => {
-    xlast = np(event.pageX)
-    ylast = np(event.pageY)
-    cursor.move(xlast, ylast)
     if (wheelPressed) {
         rotateVertices(-event.movementY / 500, -event.movementX / 500, 0)
     }
     draw()
+    xlast = np(event.pageX)
+    ylast = np(event.pageY)
+    cursor.move(xlast, ylast)
 })
 
 const sliders = {
@@ -115,30 +115,30 @@ const texts = {
 }
 
 function updateValues() {
-    sliders.red.value = cursor.r * 255
-    sliders.green.value = cursor.g * 255
-    sliders.blue.value = cursor.b * 255
-    texts.red.textContent = Math.round(cursor.x*1000)/1000
-    texts.green.textContent = Math.round(cursor.y*1000)/1000
-    texts.blue.textContent = Math.round(cursor.z*1000)/1000
+    sliders.red.value = cursor.r * 100
+    sliders.green.value = cursor.g * 100
+    sliders.blue.value = cursor.b * 100
+    texts.red.textContent = Math.round(sliders.red.value) / 100
+    texts.green.textContent = Math.round(sliders.green.value) / 100
+    texts.blue.textContent = Math.round(sliders.blue.value) / 100
 }
 updateValues()
 
 sliders.red.addEventListener('input', () => {
-    cursor.x = sliders.red.value / 255
-    texts.red.textContent = Math.round(cursor.x*1000)/1000
+    cursor.x = sliders.red.value / 100
+    texts.red.textContent = Math.round(sliders.red.value) / 100
     draw()
 })
 
 sliders.green.addEventListener('input', () => {
-    cursor.y = sliders.green.value / 255
-    texts.green.textContent = Math.round(cursor.y*1000)/1000
+    cursor.y = sliders.green.value / 100
+    texts.green.textContent = Math.round(sliders.green.value) / 100
     draw()
 })
 
 sliders.blue.addEventListener('input', () => {
-    cursor.z = sliders.blue.value / 255
-    texts.blue.textContent = Math.round(cursor.z*1000)/1000
+    cursor.z = sliders.blue.value / 100
+    texts.blue.textContent = Math.round(sliders.blue.value) / 100
     draw()
 })
 

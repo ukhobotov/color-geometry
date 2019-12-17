@@ -6,6 +6,10 @@ body {
     flex-direction: row;
 }
 
+#space {
+    cursor: none;
+}
+
 .hbox {
     display: flex;
     flex-direction: row;
