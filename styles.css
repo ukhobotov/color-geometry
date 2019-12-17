@@ -1,0 +1,25 @@
+body {
+    background-color: black;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-direction: row;
+}
+
+.hbox {
+    display: flex;
+    flex-direction: row;
+}
+
+.vbox {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+p {
+    font-family: monospace;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+}

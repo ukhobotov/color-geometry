@@ -2,10 +2,10 @@ input[type=range] {
     -webkit-appearance: none;
     height: 80px;
     width: 400px;
-    margin-left: -140px;
-    margin-right: -140px;
-    margin-top: 200px;
-    margin-bottom: 200px;
+    margin-left: -160px;
+    margin-right: -160px;
+    margin-top: 160px;
+    margin-bottom: 160px;
     transform: rotate(270deg);
     background: transparent;
     border: 2px solid white;
