@@ -147,6 +147,7 @@ class Edge {
 class Cursor extends Vector {
     constructor(r, g, b) {
         super(r, g, b)
+        this.projection = new Vector(0, 0, 0)
     }
     get r() { return this.x }
     get g() { return this.y }
@@ -187,6 +188,13 @@ class Cursor extends Vector {
             graphics.lineWidth = (projection.z + 4)
             projection.point(`rgb(${rgb(this.r)},${rgb(this.g)},${rgb(this.b)})`)
         }
+
+        let next = new Cursor(
+            this.projection.x != 0 && this.projection.x != 1 ? this.projection.x : this.r,
+            this.projection.y != 0 && this.projection.y != 1 ? this.projection.y : this.g,
+            this.projection.z != 0 && this.projection.z != 1 ? this.projection.z : this.b,
+        )
+        this.projection.axirize().point(`rgb(${rgb(next.r)},${rgb(next.g)},${rgb(next.b)})`)
     }
     move(x0, y0) {
         let points = Object.values(vertices)
@@ -244,17 +252,11 @@ class Cursor extends Vector {
                 }
             }
         }
-        let projection = new Cursor(projections[0], projections[1], projections[2])
-        this.next = new Cursor(
-            projections[0] != 0 && projections[0] != 1 ? projections[0] : this.r, 
-            projections[1] != 0 && projections[1] != 1 ? projections[1] : this.g, 
-            projections[2] != 0 && projections[2] != 1 ? projections[2] : this.b,
-        )
-        projection.axirize().point(`rgb(${rgb(this.next.r)},${rgb(this.next.g)},${rgb(this.next.b)})`)
+        this.projection = new Cursor(projections[0], projections[1], projections[2])
     }
     click() {
-        this.r = this.next.r
-        this.g = this.next.g
-        this.b = this.next.b
+        this.r = this.projection.x != 0 && this.projection.x != 1 ? this.projection.x : this.r
+        this.g = this.projection.y != 0 && this.projection.y != 1 ? this.projection.y : this.g
+        this.b = this.projection.z != 0 && this.projection.z != 1 ? this.projection.z : this.b
     }
 }

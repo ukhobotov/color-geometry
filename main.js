@@ -49,8 +49,8 @@ function draw() {
 }
 
 function updateCanvasSize() {
-    canvas.width = window.innerHeight
-    canvas.height = window.innerHeight
+    canvas.width = Math.min(window.innerWidth, window.innerHeight)
+    canvas.height = canvas.width
     draw()
 }
 
@@ -76,7 +76,6 @@ let ylast = 0
 document.body.addEventListener('wheel', (event) => {
     rotateVertices(0, event.deltaX / 500, event.deltaY / 500)
     draw()
-    cursor.move(xlast, ylast)
 })
 
 let wheelPressed = false
@@ -96,10 +95,10 @@ document.body.addEventListener('mousemove', (event) => {
     if (wheelPressed) {
         rotateVertices(-event.movementY / 500, -event.movementX / 500, 0)
     }
-    draw()
     xlast = np(event.pageX)
     ylast = np(event.pageY)
     cursor.move(xlast, ylast)
+    draw()
 })
 
 const sliders = {
